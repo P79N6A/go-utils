@@ -52,3 +52,14 @@ func NewSyncProducer(driverName string, addrs []string, config interface{}) (syn
 
 	return driveri.NewSyncProducer(addrs, config)
 }
+
+func NewConsumerGroup(driverName string, addrs []string, groupID string, config interface{}) (driver.ConsumerGroup, error) {
+	driversMu.RLock()
+	driveri, ok := drivers[driverName]
+	driversMu.RUnlock()
+	if !ok {
+		return nil, fmt.Errorf("sql: unknown driver %q (forgotten import?)", driverName)
+	}
+
+	return driveri.NewConsumerGroup(addrs, groupID, config)
+}
